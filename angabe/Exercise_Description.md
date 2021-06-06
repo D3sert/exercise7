@@ -1,52 +1,5 @@
 # Aufgabenblatt 7
 
-## Allgemeine Anmerkungen
-
-Im Verzeichnis `states` werden mehrere Dateien mit der Endung `.txt` mitgeliefert. Diese enthalten
-Daten von je einem Himmelskörper sowie dessen Positionen und Geschwindigkeitsvektoren für alle 
-Tage der Jahre 2019-2021. Die Angaben sind wie gewohnt in kartesischen Koordinaten, wobei die 
-Sonne den Urspung des Koordinatensystems bildet und die Ekliptik die x-y-Ebene darstellt.
-
-ACHTUNG: Werte sind in km bzw. km/sec angegeben! 
-
-Die Daten stammen von `https://ssd.jpl.nasa.gov/horizons.cgi#top`.
-
-Weiters werden die Dateien `BodyCollection.java`, `StateFileNotFoundException.java`, 
-`StateFileFormatException.java` und `ReadDataUtil.java` mitgeliefert. 
-
-## Ziel
-Ziel der Aufgabe ist das Verständnis und die Anwendung der Konzepte: Kopie vs. Sichtweise 
-(Skriptum S. 106), Eingabe mit Validierung, Exceptions (S. 123).
-
-## Gegebene Interfaces
-Gegeben ist folgende Interface-Definition:
-````
-public interface BodyCollection extends BodyIterable {
-
-    // Ensures that this collection contains the specified body. Returns 'true' if this collection
-    // changed as a result of the call. (Returns false if this collection does not permit
-    // duplicates and already contains the specified body.)
-    boolean add(Body b);
-
-    // Returns 'true' if this collection contains the specified body. More formally, returns
-    // 'true' if and only if this collection contains at least one body 'c' such
-    // that (b==null ? false : b.equals(c)).
-    boolean contains(Body b);
-
-    // Returns the number of bodies in this collection.
-    int size();
-    
-    // Returns an array with all the bodies of this collection.
-    Body[] toArray();
-
-}
-````
-
-## Aufgaben
-
-
-2470 / 5000
-Translation results
 Several files with the extension `.txt` are provided in the` states` directory. These contain
 Data from each celestial body as well as its positions and velocity vectors for all
 Days of the years 2019-2021. As usual, the information is in Cartesian coordinates, with the
@@ -166,3 +119,6 @@ public interface BodyCollection extends BodyIterable {
    
     ![x-y-Ebene](solar-system-x-y.png) 
     
+    y-z-Ebene (freiwillig):
+    
+    ![y-z-Ebene](solar-system-y-z.png)
