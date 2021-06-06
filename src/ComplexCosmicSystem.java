@@ -18,9 +18,32 @@ public class ComplexCosmicSystem implements CosmicComponent, BodyIterable, Cosmi
         }
     }
 
+    public MyCosmicComponentNode getHead() {
+        return this.head;
+    }
+
     public BodyCollection getBodies() {
         return null;
     }
+
+
+    private void remove(MyCosmicComponentNode node) {
+        if(node.prev() == null) {
+            this.head = node.next();
+        }
+        else {
+            node.prev().setNext(node.next());
+        }
+
+        if(node.next() == null) {
+            this.tail = node.prev();
+        }
+        else {
+            node.next().setPrev(node.prev());
+        }
+    }
+
+
 
     // Adds 'comp' to the list of cosmic components of the system if the list does not already contain a
     // component with the same name as 'comp', otherwise does not change the object state. The method
@@ -158,7 +181,10 @@ public class ComplexCosmicSystem implements CosmicComponent, BodyIterable, Cosmi
     // Returns an iterator over elements of type 'Body'.
     @Override
     public BodyIterator iterator() {
-        return new MyBodyIter(head);
+        return new ComplexCosmicSystem.MyBodyIter(this);
+    }
+    public BodyIterator iterator(MyBodyIter outeriter) {
+        return new ComplexCosmicSystem.MyBodyIter(this,outeriter);
     }
 
     // Returns the 'ComplexCosmicSystem' with which a body is
@@ -207,8 +233,64 @@ public class ComplexCosmicSystem implements CosmicComponent, BodyIterable, Cosmi
         return false;
     }
 
+    public class MyBodyIter implements BodyIterator {
+        private MyCosmicComponentNode node;
+        private ComplexCosmicSystem system;
+        private BodyIterator iter;
+        private BodyIterator Outeriter;
 
+        public MyBodyIter(ComplexCosmicSystem system) {
+            this(system,null);
+        }
+        public MyBodyIter(ComplexCosmicSystem system, MyBodyIter outeriter) {
+            this.system = system;
+            this.node = system.getHead();
+            this.Outeriter = outeriter;
+        }
+
+
+
+        @Override
+        public boolean hasNext() {
+            return node != null || (iter != null && iter.hasNext());
+        }
+
+
+        @Override
+        public void remove() {
+            system.remove(node);
+        }
+
+        @Override
+        public Body next() {
+            if (node == null) {
+                if (iter != null && !iter.hasNext()) {throw new java.util.NoSuchElementException();}
+            }
+            Body body;
+
+            if (iter != null && iter.hasNext()) {
+                return iter.next();
+            } else {
+                CosmicComponent c = node.getComponent();
+
+                if (c.getClass() == Body.class) {
+                    body = (Body) c;
+                    node = node.next();
+                } else if (c.getClass() == ComplexCosmicSystem.class) {
+                    iter = ((ComplexCosmicSystem) c).iterator();
+                    node = node.next();
+                    body = iter.next();
+                } else return null;
+
+                return body;
+            }
+        }
+    }
 }
+
+
+
+
 
 class MyCosmicComponentNode {
     private CosmicComponent c;
@@ -323,4 +405,7 @@ class MyCosmicComponentNode {
         return next == null ? this.c + "\n\t" : this.c + "\n\t" + next.toString();
 
     }
+
+
+
 }
